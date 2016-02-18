@@ -88,8 +88,8 @@ run();
 
 ## Notes
 
-*	The last `argument` applied to each waterfall `function` is a callback. This `function` should be invoked upon a series `function` completion. The first argument is reserved as an `error` argument (which can be `null`). Any results which are to be passed to the next `function` in the series should be provided beginning with the second argument.
-*	If any `function` calls the provided callback with a truthy `error` argument, the waterfall suspends execution and calls the provided callback for subsequent `error` handling.
+*	The last `argument` applied to each waterfall `function` is a callback. This `function` should be invoked upon a series `function` completion. The first argument is reserved as an `error` argument (which can be `null`). Any results which should be passed to the next `function` in the series should be provided beginning with the second argument.
+*	If any `function` calls the `done` callback with a truthy `error` argument, the waterfall suspends execution and immediately calls the `done` callback for subsequent `error` handling.
 *	This implementation does __not__ guarantee that execution is asynchronous. To do so, wrap the `done` callback in a `function` which either executes at the end of the current stack (e.g., `nextTick`) or during a subsequent turn of the event loop (e.g., `setIntermediate`, `setTimeout`).
 
 
