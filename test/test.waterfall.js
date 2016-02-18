@@ -118,3 +118,38 @@ tape( 'the function immediately returns an error to a provided callback', functi
 	fcns = [ foo, bar, fun ];
 	waterfall( fcns, done );
 });
+
+tape( 'the function supports invoking each function in series with a specified `this` context', function test( t ) {
+	var locals;
+	var fcns;
+
+	locals = {};
+
+	function foo( next ) {
+		/* jshint validthis:true */
+		this._idx = 0;
+		next();
+	}
+	function bar(next ) {
+		/* jshint validthis:true */
+		t.equal( this._idx, 0, 'correct this context' );
+		this._idx += 1;
+		next();
+	}
+	function fun(next ) {
+		/* jshint validthis:true */
+		t.equal( this._idx, 1, 'correct this context' );
+		this._idx += 1;
+		next();
+	}
+	function done( error ) {
+		if ( error ) {
+			t.ok( false, error.message );
+		}
+		t.equal( locals._idx, 2, 'correct this context' );
+		t.end();
+	}
+
+	fcns = [ foo, bar, fun ];
+	waterfall( fcns, done, locals );
+});

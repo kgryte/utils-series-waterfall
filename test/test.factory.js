@@ -128,3 +128,40 @@ tape( 'the function returns a function which immediately returns an error to a p
 	f = factory( fcns, done );
 	f();
 });
+
+tape( 'the function returns a function which supports invoking each function in series with a specified `this` context', function test( t ) {
+	var locals;
+	var fcns;
+	var f;
+
+	locals = {};
+
+	function foo( next ) {
+		/* jshint validthis:true */
+		this._idx = 0;
+		next();
+	}
+	function bar(next ) {
+		/* jshint validthis:true */
+		t.equal( this._idx, 0, 'correct this context' );
+		this._idx += 1;
+		next();
+	}
+	function fun(next ) {
+		/* jshint validthis:true */
+		t.equal( this._idx, 1, 'correct this context' );
+		this._idx += 1;
+		next();
+	}
+	function done( error ) {
+		if ( error ) {
+			t.ok( false, error.message );
+		}
+		t.equal( locals._idx, 2, 'correct this context' );
+		t.end();
+	}
+
+	fcns = [ foo, bar, fun ];
+	f = factory( fcns, done, locals );
+	f();
+});
