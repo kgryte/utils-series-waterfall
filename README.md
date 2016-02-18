@@ -29,6 +29,8 @@ function foo( next ) {
 
 function bar( str, next ) {
 	console.log( str );
+	// => 'beep'
+
 	next();
 }
 
@@ -54,6 +56,8 @@ function foo( next ) {
 function bar( str, next ) {
 	this._idx += 1;
 	console.log( str );
+	// => 'beep'
+
 	next();
 }
 
@@ -62,6 +66,7 @@ function done( error ) {
 		throw error;
 	}
 	console.log( ctx._idx );
+	// => 1
 }
 
 var ctx = {};
